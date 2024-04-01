@@ -9,7 +9,7 @@ on:
       - stage
       - main
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types: closed
 
 jobs:
   if_merged: 
