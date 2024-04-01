@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - run: |
           echo The PR was merged to ${{ github.event.pull_request.base.ref }}
 
