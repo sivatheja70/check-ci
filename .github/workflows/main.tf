@@ -13,7 +13,7 @@ on:
 jobs:
   if_merged: 
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && (github.event.pull_request.base.ref == 'dev' || github.event.pull_request.base.ref == 'stage' || github.event.pull_request.base.ref == 'main')
+    if: github.event.pull_request.merged == true
     steps:
       - run: |
           echo The PR was merged to ${{ github.event.pull_request.base.ref }}
