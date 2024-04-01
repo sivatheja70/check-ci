@@ -3,7 +3,7 @@ name: notes-app-ci
 on:
   push:
     branches:
-      - feature-*
+      # - feature-*
       - sandbox
       - dev
       - stage
