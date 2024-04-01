@@ -3,9 +3,6 @@ name: notes-app-ci
 on:
   push:
     branches:
-      - sandbox
-      - dev
-      - stage
       - main
   pull_request:
     types: closed
