@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     #if: ${{ always() && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
-    needs: [if_merged,npm-build]
+    needs: [if_merged]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
