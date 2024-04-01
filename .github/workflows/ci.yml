@@ -12,6 +12,13 @@ on:
     types: [opened, edited, reopened, synchronize]
 
 jobs:
+  if_merged: 
+    runs-on: ubuntu-latest
+    #if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
+    steps:
+      - run: |
+          echo The PR was merged
   npm-build:
     runs-on: ubuntu-latest
     steps:
@@ -34,8 +41,9 @@ jobs:
 
   docker-build:
     runs-on: ubuntu-latest
-    if: ${{ always() && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
-    needs: [npm-build]
+    #if: ${{ always() && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    needs: [if_merged,npm-build]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
