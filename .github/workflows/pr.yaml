@@ -6,17 +6,7 @@ on:
     branches:
     - main
 
-jobs:
-  get_githubrepo_name:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Set ENV variables
-      run: |
-        echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-    - name: Use the custom ENV variable
-      run: |
-        echo $REPO_NAME
-  
+jobs:  
   send_notification:
     runs-on: ubuntu-latest
     steps:
