@@ -1,28 +1,19 @@
 name: notes-app-ci
 
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     types: closed
 on:
-  pull_request:
-    types:
-    - closed
+  push:
     branches:
-    - main
+      - main
 
 jobs:
   if_merged: 
     runs-on: ubuntu-latest
-    # if: github.event.pull_request.merged == true
-    if: startsWith(github.event.head_commit.message, 'Merge pull request')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - run: |
-          echo The PR was merged to ${{ github.event.pull_request.base.ref }}
+          echo A PR was merged into the main branch.
 
   npm-build:
     runs-on: ubuntu-latest
@@ -46,7 +37,7 @@ jobs:
 
   docker-build:
     runs-on: ubuntu-latest
-    if: ${{ always() && github.event.pull_request.merged == true && contains(join(needs.*.result, ','), 'success') && (github.event.pull_request.base.ref == 'dev' || github.event.pull_request.base.ref == 'stage' || github.event.pull_request.base.ref == 'main') }}
+    if: ${{ always() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: [if_merged]
     steps:
       - name: Checkout code
