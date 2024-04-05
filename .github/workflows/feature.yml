@@ -1,9 +1,10 @@
 name: notes-app-ci
 
 on:
-  push:
-    branches:
-      - feature-*
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - feature-*
 
 jobs:
   if_merged: 
