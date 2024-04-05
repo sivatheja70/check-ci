@@ -62,7 +62,7 @@ jobs:
         with:
           args: >
               -Dsonar.organization=sivatheja70
-              -Dsonar.projectKey=check-ci
+              -Dsonar.projectKey=sivatheja70_check-ci
               -Dsonar.python.coverage.reportPaths=coverage.xml
               -Dsonar.verbose=true
 
