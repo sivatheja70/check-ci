@@ -56,11 +56,11 @@ jobs:
           name: sonarcloud-report
           path: .scannerwork/report-task.txt
 
-      # - name: Download SonarCloud scan results
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: sonarcloud-report
-      #     path: sonarcloud-report    
+      - name: Download SonarCloud scan results
+        uses: actions/download-artifact@v4
+        with:
+          name: sonarcloud-report
+          path: .scannerwork/report-task.txt    
 
       # # Visualize code coverage results
       # - name: Visualize Code Coverage
