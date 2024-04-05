@@ -54,7 +54,7 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v4.1.2
-
+                
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
@@ -66,6 +66,27 @@ jobs:
             -Dsonar.projectKey=sivatheja70_check-ci
             -Dsonar.javascript.lcov.reportPaths=reports/coverage/lcov.info
             -Dsonar.verbose=true
+
+         # Download SonarCloud scan results artifact
+      - name: Download SonarCloud scan results
+        uses: actions/download-artifact@v2
+        with:
+          name: sonarcloud-report
+          path: sonarcloud-report    
+
+      # Visualize code coverage results (example: using a GitHub action)
+      - name: Visualize Code Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report
+          path: coverage-report # Adjust the path as per your artifact structure
+
+      # Visualize SonarCloud scan results (example: using a GitHub action)
+      - name: Visualize SonarCloud Scan Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: sonarcloud-report
+          path: sonarcloud-report # Adjust the path as per your artifact structure
 
   docker-build:
     if: >
