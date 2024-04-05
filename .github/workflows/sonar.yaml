@@ -61,7 +61,7 @@ jobs:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-              -Dsonar.organization=sivatheja
+              -Dsonar.organization=sivatheja70
               -Dsonar.projectKey=check-ci
               -Dsonar.python.coverage.reportPaths=coverage.xml
               -Dsonar.verbose=true
