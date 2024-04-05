@@ -50,26 +50,31 @@ jobs:
             -Dsonar.projectKey=sivatheja70_check-ci
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.verbose=true
-
-      - name: Download SonarCloud scan results
-        uses: actions/download-artifact@v4
+      - name: Upload SonarCloud scan results
+        uses: actions/upload-artifact@v2
         with:
           name: sonarcloud-report
-          path: sonarcloud-report    
+          path: .scannerwork/report-task.txt
 
-      # Visualize code coverage results
-      - name: Visualize Code Coverage
-        uses: actions/upload-artifact@v4.3.1
-        with:
-          name: code-coverage-report
-          path: coverage
+      # - name: Download SonarCloud scan results
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: sonarcloud-report
+      #     path: sonarcloud-report    
 
-      # Visualize SonarCloud scan results
-      - name: Visualize SonarCloud Scan Results
-        uses: actions/upload-artifact@v4.3.1
-        with:
-          name: sonarcloud-report
-          path: sonarcloud-report
+      # # Visualize code coverage results
+      # - name: Visualize Code Coverage
+      #   uses: actions/upload-artifact@v4.3.1
+      #   with:
+      #     name: code-coverage-report
+      #     path: coverage
+
+      # # Visualize SonarCloud scan results
+      # - name: Visualize SonarCloud Scan Results
+      #   uses: actions/upload-artifact@v4.3.1
+      #   with:
+      #     name: sonarcloud-report
+      #     path: sonarcloud-report
       
       # - name: Run Analysis
       #   run: npx eslint --ext .js,.jsx,.ts,.tsx src/
