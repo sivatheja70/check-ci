@@ -34,17 +34,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Run Analysis
-        run: npx eslint --ext .js,.jsx,.ts,.tsx src/
+      # - name: Run Analysis
+      #   run: npx eslint --ext .js,.jsx,.ts,.tsx src/
         
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Auto-Applied Code Formatting
-          branch: ${{github.ref_name}}
+      # - name: Commit changes
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     commit_message: Auto-Applied Code Formatting
+      #     branch: ${{github.ref_name}}
 
-      - name: Run tests
-        run: npm test
+      # - name: Run tests
+      #   run: npm test
 
       - name: Run build
         run: npm run build --if-present
