@@ -64,7 +64,7 @@ jobs:
               -Dsonar.organization=sivatheja
               -Dsonar.projectKey=check-ci
               -Dsonar.python.coverage.reportPaths=coverage.xml
-              # -Dsonar.tests=tests/
               -Dsonar.verbose=true
+
 
       
