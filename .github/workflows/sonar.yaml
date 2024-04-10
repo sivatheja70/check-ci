@@ -50,17 +50,27 @@ jobs:
             -Dsonar.projectKey=sivatheja70_check-ci
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.verbose=true
-      - name: Upload SonarCloud scan results
-        uses: actions/upload-artifact@v2
-        with:
-          name: sonarcloud-report
-          path: .scannerwork/report-task.txt
+      # - name: Upload SonarCloud scan results
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: sonarcloud-report
+      #     path: .scannerwork/report-task.txt
+       # Triggering SonarQube analysis as results of it are required by Quality Gate check.
+    
+    # Check the Quality Gate status.
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+      # Force to fail step after specific time.
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Download SonarCloud scan results
-        uses: actions/download-artifact@v4
-        with:
-          name: sonarcloud-report
-          path: .scannerwork/report-task.txt    
+    # Optionally you can use the output from the Quality Gate in another step.
+    # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
+      - name: "Example show SonarQube Quality Gate Status value"
+        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
+    
 
       # # Visualize code coverage results
       # - name: Visualize Code Coverage
