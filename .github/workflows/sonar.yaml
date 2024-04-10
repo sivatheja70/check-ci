@@ -40,6 +40,7 @@ jobs:
         uses: actions/checkout@v4
                 
       - name: SonarCloud Scan
+        id: sonar_scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
@@ -50,50 +51,21 @@ jobs:
             -Dsonar.projectKey=sivatheja70_check-ci
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.verbose=true
-      # - name: Upload SonarCloud scan results
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: sonarcloud-report
-      #     path: .scannerwork/report-task.txt
-       # Triggering SonarQube analysis as results of it are required by Quality Gate check.
-    
-    # Check the Quality Gate status.
+
       - name: SonarQube Quality Gate check
         id: sonarqube-quality-gate-check
         uses: sonarsource/sonarqube-quality-gate-action@master
-      # Force to fail step after specific time.
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-    # Optionally you can use the output from the Quality Gate in another step.
-    # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
+      - name: Show SonarCloud scan result URL
+        if: always()  
+        run: echo "SonarCloud scan result URL is ${{ steps.sonar_scan.outputs.sonar-server-url }}"
+
       - name: "Example show SonarQube Quality Gate Status value"
         run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
-    
 
-      # # Visualize code coverage results
-      # - name: Visualize Code Coverage
-      #   uses: actions/upload-artifact@v4.3.1
-      #   with:
-      #     name: code-coverage-report
-      #     path: coverage
-
-      # # Visualize SonarCloud scan results
-      # - name: Visualize SonarCloud Scan Results
-      #   uses: actions/upload-artifact@v4.3.1
-      #   with:
-      #     name: sonarcloud-report
-      #     path: sonarcloud-report
-      
-      # - name: Run Analysis
-      #   run: npx eslint --ext .js,.jsx,.ts,.tsx src/
-        
-      # - name: Commit changes
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: Auto-Applied Code Formatting
-      #     branch: ${{github.ref_name}}
 
   docker-build:
     if: >
