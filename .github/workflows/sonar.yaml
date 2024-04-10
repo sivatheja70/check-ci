@@ -41,7 +41,7 @@ jobs:
                 
       - name: SonarCloud Scan
         id: sonar_scan
-        uses: sonarsource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@v2.1.1
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -54,14 +54,14 @@ jobs:
 
       - name: SonarQube Quality Gate check
         id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@master
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Show SonarCloud scan result URL
         if: always()  
-        run: echo "SonarCloud scan result URL is ${{ steps.sonar_scan.outputs.sonar-server-url }}"
+        run: echo "SonarCloud scan result URL is ${{ steps.sonar_scan.outputs.analysis-url }}"
 
       - name: "Example show SonarQube Quality Gate Status value"
         run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
