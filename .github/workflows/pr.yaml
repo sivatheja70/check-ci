@@ -1,4 +1,4 @@
-name: Pull Request Notifications
+name: PR Notifications to slack
 
 on:
   pull_request:
@@ -30,7 +30,7 @@ jobs:
           elif [ "${{ github.event.action }}" == "closed" ]; then
             # Send notification for PR close
             curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request has been closed in the repository $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
-          elif [ "${{ github.event.action }}" == "reopened" ]; then
+          else [ "${{ github.event.action }}" == "reopened" ]; then
             # Send notification for PR reopen
             curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request has been reopened in the repository $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
           fi
