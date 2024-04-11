@@ -10,7 +10,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+        
+      - name: Set ENV variables
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+          
       - name: Send Slack notification
         if: github.event_name == 'pull_request'
         env:
@@ -18,12 +22,10 @@ jobs:
         run: |
           if [ "${{ github.event.action }}" == "opened" ]; then
             # Send notification for PR open
-            echo "Pull request opened: ${{ github.event.pull_request.html_url }}" | \
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request from $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request opened from $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
           elif [ "${{ github.event.action }}" == "closed" ]; then
             # Send notification for PR close
-            echo "Pull request closed: ${{ github.event.pull_request.html_url }}" | \
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request from $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request closed from $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
           fi
 
 ##########################################################################################################
