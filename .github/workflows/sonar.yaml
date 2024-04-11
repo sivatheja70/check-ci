@@ -1,0 +1,114 @@
+name: notes-app-ci
+
+# on:
+#   push:
+#     branches:
+#       - feature-*
+#       - sandbox
+#       - dev
+#       - stage
+#       - main
+#   pull_request:
+#     types: [opened, edited, reopened, synchronize]
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with: 
+          node-version: "14" # Adjust the Node.js version as needed
+
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests with coverage
+        run: npm test -- --coverage
+
+      - name: Run build
+        run: npm run build --if-present
+
+  sonarcloud:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+                
+      - name: SonarCloud Scan
+        id: sonar_scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=sivatheja70
+            -Dsonar.projectKey=sivatheja70_check-ci
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.verbose=true
+
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: SonarSource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Show SonarCloud scan result URL
+        if: always()  
+        run: echo "SonarCloud scan result URL is ${{ steps.sonar_scan.outputs.analysis-url }}"
+
+      - name: "Example show SonarQube Quality Gate Status value"
+        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
+
+
+  docker-build:
+    if: >
+      success() &&
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true &&
+      (
+        github.event.pull_request.base.ref == 'sandbox' ||
+        github.event.pull_request.base.ref == 'dev' ||
+        github.event.pull_request.base.ref == 'stage' ||
+        github.event.pull_request.base.ref == 'main'
+      )
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: sivatheja2013/github-notes-app
+          tags: |
+            type=raw,value=${{ github.ref_slug }}-${{ github.run_number }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
