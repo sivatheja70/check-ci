@@ -2,7 +2,7 @@ name: Pull Request Notifications
 
 on:
   pull_request:
-    types: [opened, closed]
+    types: [opened, closed, pull_request_review_comment]
 
 jobs:
   notify_slack:
