@@ -22,13 +22,13 @@ jobs:
         run: |
           if [ "${{ github.event.action }}" == "opened" ]; then
             # Send notification for PR open
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request was opened in the $REPO_NAME repository: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request has been opened in the repository $REPO_NAME : ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
           elif [ "${{ github.event.action }}" == "closed" ]; then
             # Send notification for PR close
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request was closed in the $REPO_NAME repository: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request has been closed in the repository $REPO_NAME : ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
           elif [ "${{ github.event.action }}" == "reopened" ]; then
             # Send notification for PR close
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request was reopened in the $REPO_NAME repository: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request has been reopened in the repository $REPO_NAME : ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
           fi
 
 ##########################################################################################################
