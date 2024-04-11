@@ -37,7 +37,7 @@ jobs:
         run: npm ci
 
       - name: Format Code
-        run: npx prettier -w src/
+        run: npx prettier -w .
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
