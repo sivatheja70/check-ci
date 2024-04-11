@@ -28,7 +28,7 @@ jobs:
             curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request has been opened in the repository $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
           elif [ "${{ github.event.action }}" == "closed" ]; then
             curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request has been closed in the repository $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
-          else [ "${{ github.event.action }}" == "reopened" ]; then
+          elif [ "${{ github.event.action }}" == "reopened" ]; then
             curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request has been reopened in the repository $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
           fi
 
