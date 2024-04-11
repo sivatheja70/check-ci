@@ -2,7 +2,7 @@ name: Pull Request Notifications
 
 on:
   pull_request:
-    types: [opened, closed, pull_request_review_comment]
+    types: [opened, closed]
 
 jobs:
   notify_slack:
@@ -26,9 +26,6 @@ jobs:
           elif [ "${{ github.event.action }}" == "closed" ]; then
             # Send notification for PR close
             curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request closed from $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
-          elif [ "${{ github.event.action }}" == "pull_request_review_comment" ]; then
-            # Send notification for PR close
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"comment on $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
           fi
 
 ##########################################################################################################
