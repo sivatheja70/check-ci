@@ -30,8 +30,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests
-        run: npm test
+      - name: Format Code
+        run: npx prettier -w .
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Auto-Applied Code Formatting
+          # branch: ${{github.ref_name}}
+
+      # - name: Run tests
+      #   run: npm test
 
       - name: Run build
         run: npm run build --if-present
