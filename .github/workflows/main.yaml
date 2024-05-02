@@ -49,12 +49,16 @@ jobs:
         run: |
          git config --global user.email "actions@github.com"
          git config --global user.name "GitHub Actions"
-         git remote set-url origin https://x-access-token:${{ secrets.HUB_TOKEN }}@github.com/${{ github.repository }}
+         # git remote set-url origin https://x-access-token:${{ secrets.HUB_TOKEN }}@github.com/${{ github.repository }}
          git add .
          git commit -m "Auto-Applied Code Formatting"
-         git push origin ${{ env.BRANCH }}
+         
+      - name: Push changes
         env:
-          GITHUB_TOKEN: ${{ secrets.HUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.HUB_TOKEN }}
+        run: |
+          git push https://sivatheja70:${HUB_TOKEN}@github.com/sivatheja70/check-ci.git ${{env.BRANCH}}
+          
 
 
       # - name: Run tests
