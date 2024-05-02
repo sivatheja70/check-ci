@@ -31,7 +31,7 @@ jobs:
         run: npm ci
 
       - name: Format Code
-        run: npx prettier -w 
+        run: touch test.yaml 
 
       # - name: Commit changes
       #   uses: stefanzweifel/git-auto-commit-action@v5
@@ -47,7 +47,7 @@ jobs:
          git commit -m "Auto-Applied Code Formatting"
          git push origin ${{ github.ref }}
         env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
 
 
       # - name: Run tests
