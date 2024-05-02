@@ -33,6 +33,10 @@ jobs:
       - name: Format Code
         run: touch test.yaml 
 
+      - name: Determine EAS Profile
+        id: determine_profile
+        run: echo "BRANCH=$(echo $GITHUB_REF | cut -d'/' -f3)" >> $GITHUB_ENV
+
       # - name: Commit changes
       #   uses: stefanzweifel/git-auto-commit-action@v5
       #   with:
@@ -45,7 +49,7 @@ jobs:
          git config --global user.name "GitHub Actions"
          git add .
          git commit -m "Auto-Applied Code Formatting"
-         git push origin ${{ github.ref }}
+         git push origin ${{ env.BRANCH }}
         env:
           GITHUB_TOKEN: ${{ secrets.HUB_TOKEN }}
 
