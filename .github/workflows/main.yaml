@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Use Node.js
         uses: actions/setup-node@v2
@@ -47,6 +49,7 @@ jobs:
         run: |
          git config --global user.email "actions@github.com"
          git config --global user.name "GitHub Actions"
+         git remote set-url origin https://x-access-token:${{ secrets.HUB_TOKEN }}@github.com/${{ github.repository }}
          git add .
          git commit -m "Auto-Applied Code Formatting"
          git push origin ${{ env.BRANCH }}
