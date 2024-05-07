@@ -35,8 +35,8 @@ jobs:
         with:
           ruby-version: 3.2
           bundler-cache: true
-        env:
-          FASTLANE_LANE_NAME: dev
+        # env:
+        #   FASTLANE_LANE_NAME: dev
       - name: Run tests
         run: npm test
 
