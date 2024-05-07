@@ -33,8 +33,10 @@ jobs:
       - name: ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 3.2
           bundler-cache: true
-
+        env:
+          FASTLANE_LANE_NAME: dev
       - name: Run tests
         run: npm test
 
