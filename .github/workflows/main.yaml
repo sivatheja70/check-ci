@@ -37,6 +37,11 @@ jobs:
           bundler-cache: true
         # env:
         #   FASTLANE_LANE_NAME: dev
+
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+    
       - name: Run tests
         run: npm test
 
