@@ -14,8 +14,6 @@ jobs:
      steps:
        - uses: actions/checkout@v4
  
-
-
        - name: Bump version
          run: |
            sed -i 's/containerPort/nodePort/g' deployment.yaml
