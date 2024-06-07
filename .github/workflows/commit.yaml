@@ -16,7 +16,7 @@ jobs:
 
       - name: Bump version
         run: |
-          sed -i 's/nodePort:.*/nodePort: '$(awk "/nodePort:/ { print \$2 + 1 }" deployment.yaml)'/g' deployment.yaml
+          touch abc.txt
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -25,4 +25,8 @@ jobs:
 
       - name: Print the new version code
         run: |
-          cat deployment.yaml
+          ls | grep abc.txt
+
+      - name: remove file
+        run: |
+          rm abc.txt
