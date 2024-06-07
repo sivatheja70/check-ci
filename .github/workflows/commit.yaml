@@ -1,0 +1,29 @@
+name: testing gradle autoversion
+
+on:
+    workflow_dispatch:
+    push:
+      branches:
+        - version-test
+        - stage
+
+jobs:
+   check:
+     timeout-minutes: 30
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
+ 
+       - name: Bump version
+         run: |
+           sed -i 's/containerPort:.*/containerPort: '$(awk '/containerPort:/ { print $2 + 1 }' deployment.yaml)'/g' deployment.yaml
+
+
+       - name: Commit changes
+         uses: stefanzweifel/git-auto-commit-action@v5
+         with:
+            commit_message: auto upgraded versioncode
+
+       - name: Print the new version code
+         run: |
+           grep "containerPort" deployment.yaml
