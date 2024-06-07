@@ -1,29 +1,36 @@
 name: testing gradle autoversion
 
 on:
-    workflow_dispatch:
-    push:
-      branches:
-        - version-test
-        - stage
+  workflow_dispatch:
+  push:
+    branches:
+      - version-test
+      - stage
 
 jobs:
-   check:
-     timeout-minutes: 30
-     runs-on: ubuntu-latest
-     steps:
-       - uses: actions/checkout@v4
- 
-       - name: Bump version
-         run: |
-           sed -i 's/nodePort:.*/nodePort: '$(awk '/nodePort:/ { print $2 + 1 }' deployment.yaml)'/g' deployment.yaml
+  check:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
+      - name: Bump version
+        run: |
+          touch abc.txt
 
-       - name: Commit changes
-         uses: stefanzweifel/git-auto-commit-action@v5
-         with:
-            commit_message: auto upgraded versioncode
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: auto upgraded versioncode
 
-       - name: Print the new version code
-         run: |
-           cat deployment.yaml
+      - name: Print the new version code
+        run: |
+          ls | grep abc.txt
+
+      - name: remove file
+        run: |
+          rm abc.txt
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: removed
