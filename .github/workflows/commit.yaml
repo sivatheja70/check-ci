@@ -26,4 +26,4 @@ jobs:
 
        - name: Print the new version code
          run: |
-           grep "containerPort" deployment.yaml
+           cat deployment.yaml
