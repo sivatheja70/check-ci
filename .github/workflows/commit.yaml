@@ -16,7 +16,7 @@ jobs:
  
        - name: Bump version
          run: |
-           sed -i 's/containerPort:.*/containerPort: '$(awk '/containerPort:/ { print $2 + 1 }' deployment.yaml)'/g' deployment.yaml
+           sed -i 's/nodePort:.*/nodePort: '$(awk '/nodePort:/ { print $2 + 1 }' deployment.yaml)'/g' deployment.yaml
 
 
        - name: Commit changes
