@@ -11,7 +11,7 @@ spec:
  ports:
    # Port Map
  - port: 80
-   targetPort: 3000
+   Pprt: 3000
    protocol: TCP
  # type: LoadBalancer
   type: NodePort
