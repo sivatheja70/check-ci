@@ -16,7 +16,8 @@ jobs:
  
        - name: Bump version
          run: |
-           sed -i 's/containerPort/nodePort/g' deployment.yaml
+           sed -i 's/containerPort:.*/containerPort: '$(awk '/containerPort:/ { print $2 + 1 }' deployment.yaml)'/g' deployment.yaml
+
 
        - name: Commit changes
          uses: stefanzweifel/git-auto-commit-action@v5
