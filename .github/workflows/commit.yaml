@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{secrets.SECRET_SSH_KEY}}
 
       - name: Bump version
         run: |
