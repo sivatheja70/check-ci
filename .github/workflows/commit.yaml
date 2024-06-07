@@ -22,7 +22,6 @@ jobs:
          uses: stefanzweifel/git-auto-commit-action@v5
          with:
             commit_message: auto upgraded versioncode
-            token: ${{ secrets.GITHUB_TOKEN }}
 
        - name: Print the new version code
          run: |
