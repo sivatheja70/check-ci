@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - version-test
+      # - version-test
       - stage
 
 jobs:
