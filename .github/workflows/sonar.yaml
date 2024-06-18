@@ -1,15 +1,15 @@
-name: notes-app-ci
+name: sonar-ci
 
 on:
   push:
-    branches:
-      - feature-*
-      - sandbox
-      - dev
-      - stage
-      - main
-  pull_request:
-    types: [opened, edited, reopened, synchronize]
+  #   branches:
+  #     - feature-*
+  #     - sandbox
+  #     - dev
+  #     - stage
+  #     - main
+  # pull_request:
+  #   types: [opened, edited, reopened, synchronize]
 
 jobs:
   build:
