@@ -1,59 +1,22 @@
-name: Pull Request Notifications
+name: GitHub Leaks
 
 on:
+  push:
+   branches:
+     - main
+     - feature-*
   pull_request:
-    types: [opened, closed, pull_request_review_comment]
+    types: [opened, synchronize]
 
 jobs:
-  notify_slack:
+  gitleaks:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - uses: gitleaks/gitleaks-action@v2
+      env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         
-      - name: Set ENV variables
-        run: |
-          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-          
-      - name: Send Slack notification
-        if: github.event_name == 'pull_request'
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-          if [ "${{ github.event.action }}" == "opened" ]; then
-            # Send notification for PR open
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request opened from $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
-          elif [ "${{ github.event.action }}" == "closed" ]; then
-            # Send notification for PR close
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request closed from $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
-          elif [ "${{ github.event.action }}" == "pull_request_review_comment" ]; then
-            # Send notification for PR close
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"comment on $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
-          fi
-
-##########################################################################################################
-# name: Slack Notification
-
-# on:
-#   pull_request:
-#     types: [opened, closed, reopened, edited, assigned, unassigned, review_requested, review_request_removed, synchronize, ready_for_review, locked, unlocked, auto_merge, pull_request_review, pull_request_review_comment, labeled, unlabeled]
-#     branches:
-#       - main
-
-# jobs:
-#   get_githubrepo_name:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Set ENV variables
-#         run: echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-  
-#   send_notification:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Set ENV variables
-#         run: echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-#       - name: Send Slack Notification
-#         run: |
-#           curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"A pull request from $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
-#         env:
-#           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
