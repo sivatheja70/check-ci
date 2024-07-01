@@ -44,6 +44,16 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_TL_ENGINE }}
           scope: ${{ secrets.VERCEL_ORG_ID }}
+
+      - name: Get Vercel Preview URL
+        id: get-vercel-preview-url
+        uses: ViktorJT/Get-vercel-preview-url@1.2.2
+        with:
+          vercel_access_token: ${{ secrets.VERCEL_TOKEN }}
+          gh_token: ${{ secrets.GIT_TOKEN }}
+
+      - name: Echo preview
+        run: echo "Preview url is ready ${{ steps.get-vercel-preview-url.outputs.preview_url }}"
           
       - name: Deploy to Production
         uses: amondnet/vercel-action@v25
