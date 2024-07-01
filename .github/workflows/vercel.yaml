@@ -39,6 +39,7 @@ jobs:
       - name: Deploy to Dev
         id: deploy-vercel-dev
         uses: amondnet/vercel-action@v25
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
