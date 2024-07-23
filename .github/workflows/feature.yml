@@ -1,4 +1,4 @@
-name: notes-app-ci
+name: testing
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - feature-*
 
 jobs:
-  if_merged: 
+  if_merged:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && (github.event.pull_request.base.ref == 'dev' || github.event.pull_request.base.ref == 'stage' || github.event.pull_request.base.ref == 'main')
     steps:
@@ -25,15 +25,15 @@ jobs:
         id: determine_env
         run: echo "PROFILE=$(echo $GITHUB_REF | cut -d'/' -f3)" >> $GITHUB_ENV
 
-      - name: makedire
+      - name: Create directory
         run: |
-          mkdir check || true
-          touch check/text.txt || true
+          mkdir -p check
+          touch check/text.txt
 
       - name: Build Android app
         run: echo "${{ env.PROFILE }}" >> check/text.txt
 
-      - name: upload artifact
+      - name: Upload artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -87,6 +87,7 @@ jobs:
 
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
 
       # - name: Upload to slack step
       #   uses: adrey/slack-file-upload-action@1.0.5
