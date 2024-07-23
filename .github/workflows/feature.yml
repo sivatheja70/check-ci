@@ -45,7 +45,7 @@ jobs:
         uses: adrey/slack-file-upload-action@1.0.5
         with:
             token: "9etLDFqvs6cBkk8hms291TLD"
-            path: ./check
+            path: check/text.txt
             channel: prs
 
       # - name: Notify Slack
