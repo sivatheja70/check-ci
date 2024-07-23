@@ -41,49 +41,52 @@ jobs:
            path: ./check
            retention-days: 1
 
-      - name: Upload and notify on Slack
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Set up environment variables
         run: |
-          DIRECTORY_TO_UPLOAD="check"
-          TRANSFER_SH_URL="https://transfer.sh"
-          TEMP_ZIP_FILE="report.zip"
+          echo "DIRECTORY_TO_UPLOAD=check" >> $GITHUB_ENV
+          echo "TRANSFER_SH_URL=https://transfer.sh" >> $GITHUB_ENV
+          echo "TEMP_ZIP_FILE=report.zip" >> $GITHUB_ENV
 
-          # Check if the directory exists
+      - name: Check if directory exists
+        run: |
           if [ ! -d "$DIRECTORY_TO_UPLOAD" ]; then
             echo "Directory $DIRECTORY_TO_UPLOAD does not exist."
             exit 1
           fi
 
-          # Compress the directory into a zip file
-          zip -r $TEMP_ZIP_FILE $DIRECTORY_TO_UPLOAD
+      - name: Compress the directory into a zip file
+        run: zip -r $TEMP_ZIP_FILE $DIRECTORY_TO_UPLOAD
 
-          # Upload the zip file to transfer.sh
+      - name: Upload the zip file to transfer.sh
+        id: upload
+        run: |
           UPLOAD_URL=$(curl --upload-file ./$TEMP_ZIP_FILE $TRANSFER_SH_URL/$TEMP_ZIP_FILE)
+          echo "::set-output name=url::$UPLOAD_URL"
 
-          # Check if the upload was successful
-          if [[ $UPLOAD_URL == *"transfer.sh"* ]]; then
-            echo "Upload successful: $UPLOAD_URL"
+      - name: Check if upload was successful
+        run: |
+          if [[ ${{ steps.upload.outputs.url }} == *"transfer.sh"* ]]; then
+            echo "Upload successful: ${{ steps.upload.outputs.url }}"
           else
             echo "Upload failed."
             exit 1
           fi
 
-          # Create the Slack message payload
+      - name: Create and post Slack message
+        run: |
           SLACK_MESSAGE_PAYLOAD=$(cat <<EOF
           {
-            "text": "New report uploaded: <$UPLOAD_URL|Download Report>"
+            "text": "New report uploaded: <${{ steps.upload.outputs.url }}|Download Report>"
           }
           EOF
           )
-
-          # Post the message to Slack
           curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE_PAYLOAD" $SLACK_WEBHOOK_URL
 
-          # Clean up the temporary zip file
-          rm $TEMP_ZIP_FILE
+      - name: Clean up temporary zip file
+        run: rm $TEMP_ZIP_FILE
 
-          echo "Report uploaded and message posted to Slack."
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       # - name: Upload to slack step
       #   uses: adrey/slack-file-upload-action@1.0.5
