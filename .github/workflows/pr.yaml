@@ -3,7 +3,7 @@ name: Slack Notification
 on:
   push:
     branches:
-        - feature-3
+      - feature-3
   pull_request:
     types: [opened, closed, reopened, edited, assigned, unassigned, review_requested, review_request_removed, synchronize, ready_for_review, locked, unlocked, auto_merge, pull_request_review, pull_request_review_comment, labeled, unlabeled]
     branches:
