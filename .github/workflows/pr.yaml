@@ -16,8 +16,8 @@ jobs:
       - name: Set ENV variables
         run: |
           echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-          echo "SAUCE_USERNAME=${{ Ssecrets.SAUCE_USERNAME }}" >> $GITHUB_ENV
-          echo "SAUCE_ACCESS_KEY=${{ Ssecrets.SAUCE_ACCESS_KEY }} >> $GITHUB_ENV
+          echo "SAUCE_USERNAME=${{ secrets.SAUCE_USERNAME }}" >> $GITHUB_ENV
+          echo "SAUCE_ACCESS_KEY=${{ secrets.SAUCE_ACCESS_KEY }} >> $GITHUB_ENV
 
           curl -u "$SAUCE_ACCESS_KEY:$SAUCE_ACCESS_KEY" --request POST 'https://api.us-west-1.saucelabs.com/v1/storage/upload' --form 'payload=@"/Users/runner/Library/Developer/Xcode/DerivedData/HealthcareFrontend-aexroozlhbtsbmhajvliippddzsc/Build/Products/Debug-iphonesimulator/HealthcareFrontend.zip"' --form 'name="HealthcareFrontend.zip"'
   
