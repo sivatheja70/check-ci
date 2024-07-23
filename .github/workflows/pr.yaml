@@ -15,7 +15,6 @@ jobs:
     steps:
       - name: Set ENV variables
         run: |
-          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
           echo "SAUCE_USERNAME=${{ secrets.SAUCE_USERNAME }}" >> $GITHUB_ENV
           echo "SAUCE_ACCESS_KEY=${{ secrets.SAUCE_ACCESS_KEY }} >> $GITHUB_ENV
 
