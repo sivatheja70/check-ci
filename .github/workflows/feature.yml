@@ -41,12 +41,56 @@ jobs:
            path: ./check
            retention-days: 1
 
-      - name: Upload to slack step
-        uses: adrey/slack-file-upload-action@1.0.5
-        with:
-            token: "9etLDFqvs6cBkk8hms291TLD"
-            path: ./check/text.txt
-            channel: prs
+      - name: Upload and notify on Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          DIRECTORY_TO_UPLOAD="check"
+          TRANSFER_SH_URL="https://transfer.sh"
+          TEMP_ZIP_FILE="report.zip"
+
+          # Check if the directory exists
+          if [ ! -d "$DIRECTORY_TO_UPLOAD" ]; then
+            echo "Directory $DIRECTORY_TO_UPLOAD does not exist."
+            exit 1
+          fi
+
+          # Compress the directory into a zip file
+          zip -r $TEMP_ZIP_FILE $DIRECTORY_TO_UPLOAD
+
+          # Upload the zip file to transfer.sh
+          UPLOAD_URL=$(curl --upload-file ./$TEMP_ZIP_FILE $TRANSFER_SH_URL/$TEMP_ZIP_FILE)
+
+          # Check if the upload was successful
+          if [[ $UPLOAD_URL == *"transfer.sh"* ]]; then
+            echo "Upload successful: $UPLOAD_URL"
+          else
+            echo "Upload failed."
+            exit 1
+          fi
+
+          # Create the Slack message payload
+          SLACK_MESSAGE_PAYLOAD=$(cat <<EOF
+          {
+            "text": "New report uploaded: <$UPLOAD_URL|Download Report>"
+          }
+          EOF
+          )
+
+          # Post the message to Slack
+          curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE_PAYLOAD" $SLACK_WEBHOOK_URL
+
+          # Clean up the temporary zip file
+          rm $TEMP_ZIP_FILE
+
+          echo "Report uploaded and message posted to Slack."
+
+      # - name: Upload to slack step
+      #   uses: adrey/slack-file-upload-action@1.0.5
+      #   with:
+      #       token: "9etLDFqvs6cBkk8hms291TLD"
+      #       path: ./check/text.txt
+      #       channel: prs
 
       # - name: Notify Slack
       #   uses: 8398a7/action-slack@v3
