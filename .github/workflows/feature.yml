@@ -41,25 +41,32 @@ jobs:
            path: ./check
            retention-days: 1
 
-      - name: Notify Slack
-        uses: 8398a7/action-slack@v3
+      - name: Upload to slack step
+        uses: adrey/slack-file-upload-action@1.0.5
         with:
-          status: custom
-          fields: job,repo,commit,author,took
-          custom_payload: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Build Report*\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}\n*Artifact:* <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Download Report>"
-                  }
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            token: "9etLDFqvs6cBkk8hms291TLD"
+            path: ./check
+            channel: prs
+
+      # - name: Notify Slack
+      #   uses: 8398a7/action-slack@v3
+      #   with:
+      #     status: custom
+      #     fields: job,repo,commit,author,took
+      #     custom_payload: |
+      #       {
+      #         "blocks": [
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": "*Build Report*\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}\n*Artifact:* <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Download Report>"
+      #             }
+      #           }
+      #         ]
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   #     - name: Use Node.js
   #       uses: actions/setup-node@v2
