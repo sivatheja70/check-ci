@@ -25,8 +25,15 @@ jobs:
         id: determine_env
         run: echo "PROFILE=$(echo $GITHUB_REF | cut -d'/' -f3)" >> $GITHUB_ENV
 
+      - name: makedire
+        run: |
+          mkdir test
+          touch note.txt/test
+
       - name: Build Android app
-        run: echo "${{ env.PROFILE }}"
+        run: echo "${{ env.PROFILE }}" > note.txt/test
+
+      
 
   #     - name: Use Node.js
   #       uses: actions/setup-node@v2
