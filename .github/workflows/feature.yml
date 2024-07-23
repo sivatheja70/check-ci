@@ -27,11 +27,11 @@ jobs:
 
       - name: makedire
         run: |
-          mkdir check
-          touch check/text.txt
+          mkdir check || true
+          touch check/text.txt || true
 
       - name: Build Android app
-        run: echo "${{ env.PROFILE }}" > check/text.txt
+        run: echo "${{ env.PROFILE }}" >> check/text.txt
 
       
 
