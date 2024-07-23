@@ -35,8 +35,8 @@ jobs:
 
       - name: upload artifact
         if: always()
-         uses: actions/upload-artifact@v4
-         with:
+        uses: actions/upload-artifact@v4
+        with:
            name: report
            path: ./check
            retention-days: 1
