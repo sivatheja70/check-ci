@@ -49,16 +49,12 @@ jobs:
            path: ./check
            retention-days: 1
 
-      - name: zip
-        run: zip -r check.zip ./check
-
-      - name: Send custom JSON data to Slack workflow
-        id: slack
-        uses: slackapi/slack-github-action@v1.26.0
+      - name: Upload to slack step
+        uses: adrey/slack-file-upload-action@master
         with:
-          payload-file-path: "./check.zip"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          token: "xoxp-6908244642401-6895586342770-7449948933175-cd5177091ee4190a402a279ec476c841"
+          path: ./check/text.txt
+          channel: ffff
 
       #    - uses: actions/upload-artifact@v4
       # id: artifact-upload-step
