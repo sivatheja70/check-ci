@@ -40,22 +40,23 @@ jobs:
       - name: Build Android app
         run: echo "${{ env.PROFILE }}" >> check/text.txt
 
-      - name: Upload artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-           name: report
-           path: ./check
-           retention-days: 1
+      # - name: Upload artifact
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #      name: report
+      #      path: ./check
+      #      retention-days: 1
 
-      - name: Get artifact ID from logs
-        id: get_artifact_id
-        env:
-          GH_TOKEN: ${{ secrets.GIT_TOKEN }}
+      - name: Upload artifact and save logs
+        if: always()
         run: |
-          ARTIFACT_LOG=$(gh run view $GITHUB_RUN_ID --log)
-          ARTIFACT_ID=$(echo "$ARTIFACT_LOG" | grep -oP 'Artifact ID is \K[0-9]+')
-          echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV
+          actions/upload-artifact@v4 --name report --path ./check --retention-days 1 2>&1 | tee upload_artifact.log
+
+      - name: Get artifact ID from log file
+        run: |
+          ARTIFACT_ID=$(grep -oP 'Artifact ID is \K[0-9]+' upload_artifact.log)
+          echo "ARTIFACT_ID=$ARTIFACT_ID"
 
       # - name: Set ENV variables
       #   run: |
