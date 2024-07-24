@@ -50,11 +50,11 @@ jobs:
            retention-days: 1
 
       - name: Upload to slack step
-        uses: adrey/slack-file-upload-action@master
+        uses: adrey/slack-file-upload-action@1
         with:
-          token: "xoxp-6908244642401-6895586342770-7449948933175-cd5177091ee4190a402a279ec476c841"
+          token: "xoxb-6908244642401-7484459321041-XLLr2IZc5mENuYxZPPiYSM0F"
           path: ./check/text.txt
-          channel: ffff
+          channel: new_app
 
       #    - uses: actions/upload-artifact@v4
       # id: artifact-upload-step
