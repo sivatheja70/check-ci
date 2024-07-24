@@ -15,20 +15,26 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          npm install || true
-          npm test || true
-  
-  send_notification:
-    needs: get_githubrepo_name
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set ENV variables
-        run: echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-      - name: Send Slack Notification
-        run: |
-          if [ $? -ne 0 ]; then
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"npm test failed for $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
-          else
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"npm test passed for $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
+          echo "hi"
+      - uses: act10ns/slack@v2
+        if: always()
+        with: 
+           status: ${{ job.status }}
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+         
+  
+  # send_notification:
+  #   needs: get_githubrepo_name
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Set ENV variables
+  #       run: echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+  #     - name: Send Slack Notification
+  #       run: |
+  #         if [ $? -ne 0 ]; then
+  #           curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"npm test failed for $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
+  #         else
+  #           curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"npm test passed for $REPO_NAME: ${{ github.event.pull_request.html_url }}\"}" $SLACK_WEBHOOK_URL
+  #       env:
+  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
