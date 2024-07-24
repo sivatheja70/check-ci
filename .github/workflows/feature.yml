@@ -38,7 +38,7 @@ jobs:
           touch check/text.txt
 
       - name: Build Android app
-        run: echoo "${{ env.PROFILE }}" >> check/text.txt
+        run: echo "${{ env.PROFILE }}" >> check/text.txt
 
       - name: Upload artifact
         id: artifact-upload-step
@@ -49,22 +49,33 @@ jobs:
            path: ./check
            retention-days: 1
 
+      - name: zip
+        run: zip -r check.zip ./check
+
+      - name: Send custom JSON data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload-file-path: "./check.zip"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
       #    - uses: actions/upload-artifact@v4
       # id: artifact-upload-step
       # with:
       #   name: my-artifact
       #   path: path/to/artifact/content/
 
-      - name: Output artifact ID
-        if: always()
-        run:  echo "ARTIFACT_URL=${{ steps.artifact-upload-step.outputs.artifact-url }}" >> $GITHUB_ENV
+      # - name: Output artifact ID
+      #   if: always()
+      #   run:  echo "ARTIFACT_URL=${{ steps.artifact-upload-step.outputs.artifact-url }}" >> $GITHUB_ENV
 
-      - name: Send Slack notification
-        if: always()
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Reports URL: $ARTIFACT_URL\"}" $SLACK_WEBHOOK_URL
+      # - name: Send Slack notification
+      #   if: always()
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #   run: |
+      #       curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Reports URL: $ARTIFACT_URL\"}" $SLACK_WEBHOOK_URL
 
       # - name: Set ENV variables
       #   run: |
