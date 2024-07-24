@@ -56,14 +56,13 @@ jobs:
       #   path: path/to/artifact/content/
 
       - name: Output artifact ID
-        run:  echo 'Artifact url is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
+        run:  echo "ARTIFACT_URL=${{ steps.artifact-upload-step.outputs.artifact-url }}" >> $GITHUB_ENV
 
       - name: Send Slack notification
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Reports url: ${{ steps.artifact-upload-step.outputs.artifact-url\"}" $SLACK_WEBHOOK_URL
-
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Reports URL: $ARTIFACT_URL\"}" $SLACK_WEBHOOK_URL
 
       # - name: Set ENV variables
       #   run: |
