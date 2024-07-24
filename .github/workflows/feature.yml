@@ -40,23 +40,23 @@ jobs:
       - name: Build Android app
         run: echo "${{ env.PROFILE }}" >> check/text.txt
 
-      # - name: Upload artifact
-      #   if: always()
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #      name: report
-      #      path: ./check
-      #      retention-days: 1
-
-      - name: Upload artifact and save logs
+      - name: Upload artifact
         if: always()
-        run: |
-          actions/upload-artifact@v4 --name report --path ./check --retention-days 1 2>&1 | tee upload_artifact.log
+        uses: actions/upload-artifact@v4
+        with:
+           name: report
+           path: ./check
+           retention-days: 1
 
-      - name: Get artifact ID from log file
-        run: |
-          ARTIFACT_ID=$(grep -oP 'Artifact ID is \K[0-9]+' upload_artifact.log)
-          echo "ARTIFACT_ID=$ARTIFACT_ID"
+      #    - uses: actions/upload-artifact@v4
+      # id: artifact-upload-step
+      # with:
+      #   name: my-artifact
+      #   path: path/to/artifact/content/
+
+      - name: Output artifact ID
+        run:  echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
+
 
       # - name: Set ENV variables
       #   run: |
