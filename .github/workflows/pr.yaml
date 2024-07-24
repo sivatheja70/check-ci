@@ -16,7 +16,6 @@ jobs:
       - name: Install dependencies
         run: |
           echo "hi"
-          eccco
         
       - name: status notification on slack
         uses: act10ns/slack@v2
