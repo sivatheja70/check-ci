@@ -62,7 +62,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Reports url: ${{ steps.artifact-upload-step.outputs.artifact-url }}
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Reports url: ${{ steps.artifact-upload-step.outputs.artifact-url\"}" $SLACK_WEBHOOK_URL
 
 
       # - name: Set ENV variables
