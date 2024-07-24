@@ -41,52 +41,55 @@ jobs:
            path: ./check
            retention-days: 1
 
-      - name: Set up environment variables
-        run: |
-          echo "DIRECTORY_TO_UPLOAD=check" >> $GITHUB_ENV
-          echo "TRANSFER_SH_URL=https://transfer.sh" >> $GITHUB_ENV
-          echo "TEMP_ZIP_FILE=report.zip" >> $GITHUB_ENV
+      - name: artifact url
+        run: echo "https://github.com/${{ github.repository }}/suites/${check_suite_id}/artifacts/${artifact_id}"
 
-      - name: Check if directory exists
-        run: |
-          if [ ! -d "$DIRECTORY_TO_UPLOAD" ]; then
-            echo "Directory $DIRECTORY_TO_UPLOAD does not exist."
-            exit 1
-          fi
+      # - name: Set up environment variables
+      #   run: |
+      #     echo "DIRECTORY_TO_UPLOAD=check" >> $GITHUB_ENV
+      #     echo "TRANSFER_SH_URL=https://transfer.sh" >> $GITHUB_ENV
+      #     echo "TEMP_ZIP_FILE=report.zip" >> $GITHUB_ENV
 
-      - name: Compress the directory into a zip file
-        run: zip -r $TEMP_ZIP_FILE $DIRECTORY_TO_UPLOAD
+      # - name: Check if directory exists
+      #   run: |
+      #     if [ ! -d "$DIRECTORY_TO_UPLOAD" ]; then
+      #       echo "Directory $DIRECTORY_TO_UPLOAD does not exist."
+      #       exit 1
+      #     fi
 
-      - name: Upload the zip file to transfer.sh
-        id: upload
-        run: |
-          UPLOAD_URL=$(curl --upload-file ./$TEMP_ZIP_FILE $TRANSFER_SH_URL/$TEMP_ZIP_FILE)
-          echo "::set-output name=url::$UPLOAD_URL"
+      # - name: Compress the directory into a zip file
+      #   run: zip -r $TEMP_ZIP_FILE $DIRECTORY_TO_UPLOAD
 
-      - name: Check if upload was successful
-        run: |
-          if [[ ${{ steps.upload.outputs.url }} == *"transfer.sh"* ]]; then
-            echo "Upload successful: ${{ steps.upload.outputs.url }}"
-          else
-            echo "Upload failed."
-            exit 1
-          fi
+      # - name: Upload the zip file to transfer.sh
+      #   id: upload
+      #   run: |
+      #     UPLOAD_URL=$(curl --upload-file ./$TEMP_ZIP_FILE $TRANSFER_SH_URL/$TEMP_ZIP_FILE)
+      #     echo "::set-output name=url::$UPLOAD_URL"
 
-      - name: Create and post Slack message
-        run: |
-          SLACK_MESSAGE_PAYLOAD=$(cat <<EOF
-          {
-            "text": "New report uploaded: <${{ steps.upload.outputs.url }}|Download Report>"
-          }
-          EOF
-          )
-          curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE_PAYLOAD" $SLACK_WEBHOOK_URL
+      # - name: Check if upload was successful
+      #   run: |
+      #     if [[ ${{ steps.upload.outputs.url }} == *"transfer.sh"* ]]; then
+      #       echo "Upload successful: ${{ steps.upload.outputs.url }}"
+      #     else
+      #       echo "Upload failed."
+      #       exit 1
+      #     fi
 
-      - name: Clean up temporary zip file
-        run: rm $TEMP_ZIP_FILE
+    #   - name: Create and post Slack message
+    #     run: |
+    #       SLACK_MESSAGE_PAYLOAD=$(cat <<EOF
+    #       {
+    #         "text": "New report uploaded: <${{ steps.upload.outputs.url }}|Download Report>"
+    #       }
+    #       EOF
+    #       )
+    #       curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE_PAYLOAD" $SLACK_WEBHOOK_URL
 
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    #   - name: Clean up temporary zip file
+    #     run: rm $TEMP_ZIP_FILE
+
+    # env:
+    #   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 
       # - name: Upload to slack step
