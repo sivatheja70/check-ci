@@ -41,8 +41,20 @@ jobs:
            path: ./check
            retention-days: 1
 
-      - name: artifact url
-        run: echo "https://github.com/${{ github.repository }}/suites/${check_suite_id}/artifacts/${artifact_id}"
+      - name: Set ENV variables
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+          echo "RUN_ID=${GITHUB_RUN_ID}" >> $GITHUB_ENV
+          echo "ARTIFACT_NAME=test-artifact" >> $GITHUB_ENV
+
+      - name: Get artifact URL
+        id: get_artifact_url
+        run: |
+          ARTIFACT_ID=$(curl -s \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" \
+            | jq -r '.artifacts[] | select(.name=="test-artifact") | .id')
+          echo "ARTIFACT_URL=https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts/${ARTIFACT_ID}"
 
       # - name: Set up environment variables
       #   run: |
