@@ -38,7 +38,7 @@ jobs:
           touch check/text.txt
 
       - name: Build Android app
-        run: echo "${{ env.PROFILE }}" >> check/text.txt
+        run: echoo "${{ env.PROFILE }}" >> check/text.txt
 
       - name: Upload artifact
         id: artifact-upload-step
@@ -56,9 +56,11 @@ jobs:
       #   path: path/to/artifact/content/
 
       - name: Output artifact ID
+        if: always()
         run:  echo "ARTIFACT_URL=${{ steps.artifact-upload-step.outputs.artifact-url }}" >> $GITHUB_ENV
 
       - name: Send Slack notification
+        if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
