@@ -56,7 +56,13 @@ jobs:
       #   path: path/to/artifact/content/
 
       - name: Output artifact ID
-        run:  echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
+        run:  echo 'Artifact url is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
+
+      - name: Send Slack notification
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Reports url: ${{ steps.artifact-upload-step.outputs.artifact-url }}
 
 
       # - name: Set ENV variables
