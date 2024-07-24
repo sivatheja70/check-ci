@@ -17,11 +17,9 @@ jobs:
         run: |
           echo "hi"
           eccco
-  slack:
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - uses: act10ns/slack@v2
+        
+      - name: status notification on slack
+        uses: act10ns/slack@v2
         if: always()
         with: 
            status: ${{ job.status }}
