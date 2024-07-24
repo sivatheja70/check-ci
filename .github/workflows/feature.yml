@@ -50,7 +50,7 @@ jobs:
            retention-days: 1
 
       - name: Upload to slack step
-        uses: adrey/slack-file-upload-action@1
+        uses: adrey/slack-file-upload-action@v1
         with:
           token: "xoxb-6908244642401-7484459321041-XLLr2IZc5mENuYxZPPiYSM0F"
           path: ./check/text.txt
