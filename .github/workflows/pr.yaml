@@ -16,6 +16,7 @@ jobs:
       - name: Install dependencies
         run: |
           echo "hi"
+          eccco
       - uses: act10ns/slack@v2
         if: always()
         with: 
