@@ -4,7 +4,7 @@ on:
     workflow_dispatch:
     push:
       branches:
-        - feature_*
+        - feature-*
 
 jobs:
    android:
@@ -25,6 +25,6 @@ jobs:
             elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
              echo "KEY=${{ secrets.DEVELOP_KEY }}" >> $GITHUB_ENV
              echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> $GITHUB_ENV
-            elif [[ "${GITHUB_REF}" == refs/heads/feature_* ]]; then
+            elif [[ "${GITHUB_REF}" == refs/heads/feature-* ]]; then
              echo "KEY= DEVELOP_KEY" >> $GITHUB_EN
             fi
