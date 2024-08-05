@@ -1,0 +1,30 @@
+name: print_name
+ 
+on:
+    workflow_dispatch:
+    push:
+      branches:
+        - feature_*
+
+jobs:
+   android:
+     timeout-minutes: 30
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
+ 
+       - name: Determine env
+         id: determine_env
+         run: echo "PROFILE=$(echo $GITHUB_REF | cut -d'/' -f3)" >> $GITHUB_ENV
+ 
+       - name: print env
+         run: |
+            if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+             echo "KEY=${{ secrets.MAIN_KEY }}" >> $GITHUB_ENV
+             echo "SECRET=${{ secrets.MAIN_SECRET }}" >> $GITHUB_ENV
+           elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+             echo "KEY=${{ secrets.DEVELOP_KEY }}" >> $GITHUB_ENV
+             echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> $GITHUB_ENV
+           else [[ "${GITHUB_REF}" == refs/heads/feature_* ]]; then
+             echo "KEY= DEVELOP_KEY" >> $GITHUB_EN
+           fi
