@@ -22,9 +22,9 @@ jobs:
             if [ "${{ github.ref }}" == "refs/heads/main" ]; then
              echo "KEY=${{ secrets.MAIN_KEY }}" >> $GITHUB_ENV
              echo "SECRET=${{ secrets.MAIN_SECRET }}" >> $GITHUB_ENV
-           elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+            elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
              echo "KEY=${{ secrets.DEVELOP_KEY }}" >> $GITHUB_ENV
              echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> $GITHUB_ENV
-           else [[ "${GITHUB_REF}" == refs/heads/feature_* ]]; then
+            elif [[ "${GITHUB_REF}" == refs/heads/feature_* ]]; then
              echo "KEY= DEVELOP_KEY" >> $GITHUB_EN
-           fi
+            fi
