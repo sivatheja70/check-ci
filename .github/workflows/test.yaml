@@ -16,12 +16,12 @@ jobs:
        - name: Determine env
          id: determine_env
          run: |
-           PROFILE=$(echo $GITHUB_REF | cut -d'/' -f3)
-           # Check if PROFILE is one of the valid values; otherwise, set it to 'develop'
-           if [[ "$PROFILE" != "develop" && "$PROFILE" != "stage" && "$PROFILE" != "test" && "$PROFILE" != "main" ]]; then
-             PROFILE="develop"
-           fi
-           echo "PROFILE=${PROFILE}" >> $GITHUB_ENV
-
-       - name: Print env
+            PROFILE=$(echo $GITHUB_REF | cut -d'/' -f3)
+            # Check if PROFILE is one of the valid values; otherwise, set it to 'develop'
+            if [[ "$PROFILE" = feature_*_fastlane ]]; then
+              PROFILE="develop"
+            fi
+            echo "PROFILE=${PROFILE}" >> $GITHUB_ENV
+ 
+       - name: print env
          run: echo "${{ env.PROFILE }}"
