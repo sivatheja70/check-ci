@@ -54,5 +54,8 @@ jobs:
                echo "KEY=${{ secrets.DEVELOP_KEY }}" >> /.env
                echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> /.env
              fi
-       - name: read .env
-         run: cat .env
+       - name: Check .env file content
+         run: |
+          echo "Checking .env file contents"
+          grep -E '^KEY=' .env
+          grep -E '^SECRET=' .env
