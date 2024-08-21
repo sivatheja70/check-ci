@@ -42,7 +42,7 @@ jobs:
                echo "KEY=${{ secrets.MAIN_KEY }}" >> .env
                echo "SECRET=${{ secrets.MAIN_SECRET }}" >> .env
              elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
-               echo "KEY=${{ secrets.DEVELOP_KEY }}" >> .env
+               echo "KEY=${{ ENV.DEVELOP_KEY }}" >> .env
                echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> .env
              elif [ "${{ github.ref }}" == "refs/heads/stage" ]; then
                echo "KEY=${{ secrets.MAIN_KEY }}" >> .env
