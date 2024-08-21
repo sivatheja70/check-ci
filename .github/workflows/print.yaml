@@ -22,6 +22,16 @@ jobs:
               PROFILE="develop"
             fi
             echo "PROFILE=${PROFILE}" >> $GITHUB_ENV
+
+       - name: Validate env
+         id: validate_env
+         run: |
+           if [[ "${{ env.PROFILE }}" != "develop" && "${{ env.PROFILE }}" != "main" && "${{ env.PROFILE }}" != "stage" && "${{ env.PROFILE }}" != "test" && "${{ env.PROFILE }}" != "feature_*_fastlane" ]]; then
+             echo "Invalid PROFILE value: ${{ env.PROFILE }}"
+             exit 1
+           fi
  
        - name: print env
          run: echo "${{ env.PROFILE }}"
+       - name: check
+         run: echo "working"
