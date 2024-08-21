@@ -35,3 +35,24 @@ jobs:
  
        - name: print env
          run: echo "${{ env.PROFILE }}"
+
+       - name: Set environment variables based on branch
+         run: |
+             if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+               echo "KEY=${{ secrets.MAIN_KEY }}" >> app/.env
+               echo "SECRET=${{ secrets.MAIN_SECRET }}" >> app/.env
+             elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+               echo "KEY=${{ secrets.DEVELOP_KEY }}" >> app/.env
+               echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> app/.env
+             elif [ "${{ github.ref }}" == "refs/heads/stage" ]; then
+               echo "KEY=${{ secrets.MAIN_KEY }}" >> app/.env
+               echo "SECRET=${{ secrets.MAIN_SECRET }}" >> app/.env
+             elif [ "${{ github.ref }}" == "refs/heads/test" ]; then
+               echo "KEY=${{ secrets.MAIN_KEY }}" >> app/.env
+               echo "SECRET=${{ secrets.MAIN_SECRET }}" >> app/.env
+             elif [[ "${{ github.ref }}" == "refs/heads/feature_*_fastlane" ]]; then
+               echo "KEY=${{ secrets.DEVELOP_KEY }}" >> /.env
+               echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> /.env
+             fi
+       - name: read .env
+         run: cat .env
