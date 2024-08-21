@@ -58,4 +58,4 @@ jobs:
          run: |
           echo "Checking .env file contents"
           grep -E '^KEY=' test/.env
-          grep -E '^SECRET=' test/.env
+          grep -E '^SECRET=' .env
