@@ -1,0 +1,28 @@
+name: print_name
+ 
+on:
+    workflow_dispatch:
+    push:
+      branches:
+        - develop
+        - main
+
+jobs:
+   print:
+     timeout-minutes: 30
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
+ 
+       - name: Determine env
+         id: determine_env
+         run: |
+           PROFILE=$(echo $GITHUB_REF | cut -d'/' -f3)
+           # Check if PROFILE is one of the valid values; otherwise, set it to 'develop'
+           if [[ "$PROFILE" != "develop" && "$PROFILE" != "stage" && "$PROFILE" != "test" && "$PROFILE" != "main" ]]; then
+             PROFILE="develop"
+           fi
+           echo "PROFILE=${PROFILE}" >> $GITHUB_ENV
+
+       - name: Print env
+         run: echo "${{ env.PROFILE }}"
