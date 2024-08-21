@@ -39,23 +39,23 @@ jobs:
        - name: Set environment variables based on branch
          run: |
              if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-               echo "KEY=${{ secrets.MAIN_KEY }}" >> .env
-               echo "SECRET=${{ secrets.MAIN_SECRET }}" >> .env
+               echo "KEY=${{ secrets.MAIN_KEY }}" >> test/.env
+               echo "SECRET=${{ secrets.MAIN_SECRET }}" >> test/.env
              elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
-               echo "KEY=${{ vars.DEVELOP_KEY }}" >> .env
-               echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> .env
+               echo "KEY=${{ vars.DEVELOP_KEY }}" >> test/.env
+               echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> test/.env
              elif [ "${{ github.ref }}" == "refs/heads/stage" ]; then
-               echo "KEY=${{ secrets.MAIN_KEY }}" >> .env
-               echo "SECRET=${{ secrets.MAIN_SECRET }}" >> .env
+               echo "KEY=${{ secrets.MAIN_KEY }}" >> test/.env
+               echo "SECRET=${{ secrets.MAIN_SECRET }}" >> test/.env
              elif [ "${{ github.ref }}" == "refs/heads/test" ]; then
-               echo "KEY=${{ secrets.MAIN_KEY }}" >> .env
-               echo "SECRET=${{ secrets.MAIN_SECRET }}" >> .env
+               echo "KEY=${{ secrets.MAIN_KEY }}" >> test/.env
+               echo "SECRET=${{ secrets.MAIN_SECRET }}" >> test/.env
              elif [[ "${{ github.ref }}" == "refs/heads/feature_*_fastlane" ]]; then
-               echo "KEY=${{ secrets.DEVELOP_KEY }}" >> /.env
-               echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> /.env
+               echo "KEY=${{ secrets.DEVELOP_KEY }}" >> test/.env
+               echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> test/.env
              fi
        - name: Check .env file content
          run: |
           echo "Checking .env file contents"
-          grep -E '^KEY=' .env
-          grep -E '^SECRET=' .env
+          grep -E '^KEY=' test/.env
+          grep -E '^SECRET=' test/.env
