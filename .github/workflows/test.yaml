@@ -25,7 +25,7 @@ jobs:
          id: validate_env
          run: |
            if [[ "${{ env.PROFILE }}" != "develop" && "${{ env.PROFILE }}" != "main" && "${{ env.PROFILE }}" != "stage" && "${{ env.PROFILE }}" != "test" && "${{ env.PROFILE }}" != "feature_*_fastlane" ]]; then
-              echo "Invalid PROFILE value: ${{ env.PROFILE }} \n
+              echo "Invalid PROFILE value: ${{ env.PROFILE }}
               branch name shall be either develop/stage/test/main or feature_*_fastlane to trigger the mobile builds"
               exit 1
            fi
