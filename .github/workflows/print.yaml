@@ -61,5 +61,5 @@ jobs:
           ls
           cat .env
           echo "Checking .env file contents"
-          grep -E '^KEY=' test/.env
+          grep -E '^KEY=' .env
           grep -E '^SECRET=' .env
