@@ -56,6 +56,10 @@ jobs:
              fi
        - name: Check .env file content
          run: |
+          cd test
+          pwd
+          ls
+          cat .env
           echo "Checking .env file contents"
           grep -E '^KEY=' test/.env
           grep -E '^SECRET=' .env
