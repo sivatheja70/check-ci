@@ -55,6 +55,7 @@ jobs:
              fi
        - name: Check .env file content
          run: |
+          echo "Current branch: $GITHUB_REF"
           cd test
           pwd
           ls
