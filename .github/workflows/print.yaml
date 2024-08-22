@@ -49,7 +49,7 @@ jobs:
              elif [ "${{ github.ref }}" == "refs/heads/test" ]; then
                echo "KEY=${{ secrets.MAIN_KEY }}" >> test/.env
                echo "SECRET=${{ secrets.MAIN_SECRET }}" >> test/.env
-             elif [[ "${{ github.ref }}" == refs/heads/feature_*_fastlane ]]; then
+             elif [ "${{ github.ref }}" == refs/heads/feature_*_fastlane ]; then
                echo "KEY=${{ secrets.DEVELOP_KEY }}" >> test/.env
                echo "SECRET=${{ secrets.DEVELOP_SECRET }}" >> test/.env
              fi
