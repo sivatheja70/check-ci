@@ -16,6 +16,7 @@ jobs:
  
        - name: Determine env
          id: determine_env
+         continue-on-error: true 
          run: |
             PROFILE=$(echo $GITHUB_REF | cut -d'/' -f3)
             # Check if PROFILE is one of the valid values; otherwise, set it to 'develop'
@@ -23,15 +24,18 @@ jobs:
               PROFILE="develop"
             fi
             echo "PROFILE=${PROFILE}" >> $GITHUB_ENV
+            ecccho
 
        - name: Validate env
          id: validate_env
+         if: always()
          run: |
             if [[ "${{ env.PROFILE }}" != "develop" && "${{ env.PROFILE }}" != "main" && "${{ env.PROFILE }}" != "stage" && "${{ env.PROFILE }}" != "test" && "${{ env.PROFILE }}" != "feature_*_fastlane" ]]; then
               echo "Invalid PROFILE value: ${{ env.PROFILE }} \n
               branch name shall be either develop/stage/test/main or feature_*_fastlane to trigger the mobile builds"
               exit 1
             fi
+            
  
        - name: print env
          run: echo "${{ env.PROFILE }}"
